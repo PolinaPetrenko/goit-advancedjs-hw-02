@@ -137,3 +137,24 @@ button.addEventListener("mouseover", () => {
 button.addEventListener("mouseout", () => {
   button.style.backgroundColor = "#007bff";
 });
+const startButton = document.querySelector('button');
+
+// Функція активації кнопки
+function enableButton() {
+  startButton.disabled = false; // Увімкнути кнопку
+  startButton.style.backgroundColor = '#4caf50';
+  startButton.style.color = 'white';
+  startButton.style.cursor = 'pointer';
+}
+
+// Функція деактивації кнопки
+function disableButton() {
+  startButton.disabled = true; // Вимкнути кнопку
+  startButton.style.backgroundColor = '#ccc';
+  startButton.style.color = '#666';
+  startButton.style.cursor = 'not-allowed';
+}
+
+// Викликати функції для тесту
+disableButton(); // Кнопка неактивна
+setTimeout(enableButton, 3000); // Через 3 секунди активується
