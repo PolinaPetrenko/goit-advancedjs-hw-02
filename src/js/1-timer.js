@@ -3,7 +3,6 @@ import "flatpickr/dist/flatpickr.min.css";
 import iziToast from "izitoast";
 import "izitoast/dist/css/iziToast.min.css";
 
-
 const startButton = document.querySelector("[data-start]");
 const dateTimePicker = document.querySelector("#datetime-picker");
 const daysEl = document.querySelector("[data-days]");
@@ -14,8 +13,26 @@ const secondsEl = document.querySelector("[data-seconds]");
 let userSelectedDate = null;
 let countdownInterval = null;
 
+// Функція оновлення стану кнопки
+function updateButtonState(button, isDisabled) {
+  if (isDisabled) {
+    button.disabled = true;
+    button.style.backgroundColor = "#f0f0f0";
+    button.style.cursor = "not-allowed";
+    button.style.color = "black";
+  } else {
+    button.disabled = false;
+    button.style.backgroundColor = "#007bff";
+    button.style.cursor = "pointer";
+    button.style.color = "white";
+  }
+}
 
-const options = {
+// Встановлення початкового стану кнопки
+updateButtonState(startButton, true);
+
+// Ініціалізація flatpickr
+flatpickr(dateTimePicker, {
   enableTime: true,
   time_24hr: true,
   defaultDate: new Date(),
@@ -24,16 +41,13 @@ const options = {
     const selectedDate = selectedDates[0];
     if (selectedDate <= new Date()) {
       iziToast.error({ message: "Please choose a date in the future" });
-      startButton.disabled = true;
+      updateButtonState(startButton, true);
     } else {
       userSelectedDate = selectedDate;
-      startButton.disabled = false;
+      updateButtonState(startButton, false);
     }
   },
-};
-
-// Ініціалізація flatpickr
-flatpickr(dateTimePicker, options);
+});
 
 // Функція форматування часу
 function addLeadingZero(value) {
@@ -65,7 +79,7 @@ function updateTimerUI({ days, hours, minutes, seconds }) {
 
 // Старт таймера
 startButton.addEventListener("click", () => {
-  startButton.disabled = true;
+  updateButtonState(startButton, true);
   dateTimePicker.disabled = true;
 
   countdownInterval = setInterval(() => {
@@ -95,21 +109,18 @@ document.body.style.minHeight = "100vh";
 document.body.style.margin = "0";
 document.body.style.backgroundColor = "#f9f9f9";
 
-
-
-
+// Динамічні стилі для кнопки
 startButton.addEventListener("mouseover", () => {
   if (!startButton.disabled) {
     startButton.style.backgroundColor = "#0056b3";
-    startButton.style.color = "white";
   }
 });
 startButton.addEventListener("mouseout", () => {
   if (!startButton.disabled) {
     startButton.style.backgroundColor = "#007bff";
-    startButton.style.color = "white";
   }
 });
+
 window.addEventListener("DOMContentLoaded", () => {
   // Інпут 
   const dateTimePicker = document.querySelector("#datetime-picker");
@@ -131,12 +142,12 @@ window.addEventListener("DOMContentLoaded", () => {
   startButton.style.cursor = "not-allowed";
   startButton.style.color = "black";
 });
+
 // Таймер
 const timer = document.querySelector(".timer");
 timer.style.display = "flex";
 timer.style.gap = "20px";
 timer.style.marginTop = "20px";
-
 
 const fields = document.querySelectorAll(".field");
 fields.forEach((field) => {
@@ -145,14 +156,12 @@ fields.forEach((field) => {
   field.style.alignItems = "center";
 });
 
-
 const values = document.querySelectorAll(".value");
 values.forEach((value) => {
   value.style.fontSize = "48px";
   value.style.fontWeight = "bold";
   value.style.color = "#333";
 });
-
 
 const labels = document.querySelectorAll(".label");
 labels.forEach((label) => {
